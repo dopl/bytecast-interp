@@ -17,17 +17,16 @@
  */
 
 package edu.syr.bytecast.interp.amd64;
+import edu.syr.bytecast.amd64.api.constants.InstructionType;
+import edu.syr.bytecast.interp.amd64.instructions.*;
+import java.util.Map;
+import java.util.TreeMap;
 
-import edu.syr.bytecast.amd64.api.constants.RegisterType;
 
-public class RegisterOverlay {
-    public RegisterOverlay(RegisterType parent_register, int msb, int lsb)
-    {
-        ParentRegisterName = parent_register;
-        MSB = msb;
-        LSB = lsb;
+public class ISA {
+    private static final Map<InstructionType, IISAInstruction> m_instructions = new TreeMap();
+    static {W
+        m_instructions.put(InstructionType.ADD, new ISAInstructionADD());       
     }
-    public RegisterType ParentRegisterName;
-    public int MSB;
-    public int LSB;
+    W
 }

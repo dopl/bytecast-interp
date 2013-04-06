@@ -20,119 +20,161 @@ package edu.syr.bytecast.interp.amd64;
 
 import java.util.Map;
 import java.util.TreeMap;
-
+import edu.syr.bytecast.amd64.api.constants.RegisterType;
 
 public class RegisterBank {
     
-    private Map<String, Register> m_naturalRegs;
-    private Map<String, RegisterOverlay> m_regOverlays;
+    private Map<RegisterType, Register> m_naturalRegs;
+    private Map<RegisterType, RegisterOverlay> m_regOverlays;
     
     public RegisterBank()
     {    
-        m_regOverlays = new TreeMap<String,RegisterOverlay>();
-        m_regOverlays.put("RAX",    new RegisterOverlay("RAX",     63, 0));
-        m_regOverlays.put("EAX",    new RegisterOverlay("RAX",     31, 0));
-        m_regOverlays.put("AX",     new RegisterOverlay("RAX",     15, 0));
-        m_regOverlays.put("AH",     new RegisterOverlay("RAX",     15, 8));
-        m_regOverlays.put("AL",     new RegisterOverlay("RAX",      7, 0));
-        m_regOverlays.put("RBX",    new RegisterOverlay("RBX",     63, 0));
-        m_regOverlays.put("EBX",    new RegisterOverlay("RBX",     31, 0));
-        m_regOverlays.put("BX",     new RegisterOverlay("RBX",     15, 0));
-        m_regOverlays.put("BH",     new RegisterOverlay("RBX",     15, 8));
-        m_regOverlays.put("BL",     new RegisterOverlay("RBX",      7, 0));
-        m_regOverlays.put("RCX",    new RegisterOverlay("RCX",     63, 0));
-        m_regOverlays.put("ECX",    new RegisterOverlay("RCX",     31, 0));
-        m_regOverlays.put("CX",     new RegisterOverlay("RCX",     15, 0));
-        m_regOverlays.put("CH",     new RegisterOverlay("RCX",     15, 8));
-        m_regOverlays.put("CL",     new RegisterOverlay("RCX",      7, 0));
-        m_regOverlays.put("RDX",    new RegisterOverlay("RDX",     63, 0));
-        m_regOverlays.put("EDX",    new RegisterOverlay("RDX",     31, 0));
-        m_regOverlays.put("DX",     new RegisterOverlay("RDX",     15, 0));
-        m_regOverlays.put("DH",     new RegisterOverlay("RDX",     15, 8));
-        m_regOverlays.put("DL",     new RegisterOverlay("RDX",      7, 0));
-        m_regOverlays.put("RSP",    new RegisterOverlay("RSP",     63, 0));
-        m_regOverlays.put("ESP",    new RegisterOverlay("RSP",     31, 0));
-        m_regOverlays.put("SP",     new RegisterOverlay("RSP",     15, 0));
-        m_regOverlays.put("RBP",    new RegisterOverlay("RBP",     63, 0));
-        m_regOverlays.put("EBP",    new RegisterOverlay("RBP",     31, 0));
-        m_regOverlays.put("BP",     new RegisterOverlay("RBP",     15, 0));
-        m_regOverlays.put("RSI",    new RegisterOverlay("RSI",     63, 0));
-        m_regOverlays.put("ESI",    new RegisterOverlay("RSI",     31, 0));
-        m_regOverlays.put("SI" ,    new RegisterOverlay("RSI",     15, 0));
-        m_regOverlays.put("RDI",    new RegisterOverlay("RDI",     63, 0));
-        m_regOverlays.put("EDI",    new RegisterOverlay("RDI",     31, 0));
-        m_regOverlays.put("DI",     new RegisterOverlay("RDI",     15, 0));
-        m_regOverlays.put("R8",     new RegisterOverlay("R8",      63, 0));
-        m_regOverlays.put("R9",     new RegisterOverlay("R9",      63, 0));
-        m_regOverlays.put("R10",    new RegisterOverlay("R10",     63, 0));
-        m_regOverlays.put("R11",    new RegisterOverlay("R11",     63, 0));
-        m_regOverlays.put("R12",    new RegisterOverlay("R12",     63, 0));
-        m_regOverlays.put("R13",    new RegisterOverlay("R13",     63, 0));
-        m_regOverlays.put("R14",    new RegisterOverlay("R14",     63, 0));
-        m_regOverlays.put("R15",    new RegisterOverlay("R15",     63, 0));
-        m_regOverlays.put("R16",    new RegisterOverlay("R16",     63, 0));
-        m_regOverlays.put("SS",     new RegisterOverlay("SS",      15, 0));
-        m_regOverlays.put("CS",     new RegisterOverlay("CS",      15, 0));
-        m_regOverlays.put("DS",     new RegisterOverlay("DS",      15, 0));
-        m_regOverlays.put("ES",     new RegisterOverlay("ES",      15, 0));
-        m_regOverlays.put("FS",     new RegisterOverlay("FS",      15, 0));
-        m_regOverlays.put("GS",     new RegisterOverlay("GS",      15, 0));
-        m_regOverlays.put("EFLAGS", new RegisterOverlay("EFLAGS",  31, 0));
-        m_regOverlays.put("CF",     new RegisterOverlay("EFLAGS",   0, 0));
-        m_regOverlays.put("PF",     new RegisterOverlay("EFLAGS",   2, 2));
-        m_regOverlays.put("AF",     new RegisterOverlay("EFLAGS",   4, 4));
-        m_regOverlays.put("ZF",     new RegisterOverlay("EFLAGS",   6, 6));
-        m_regOverlays.put("SF",     new RegisterOverlay("EFLAGS",   7, 7));
-        m_regOverlays.put("TF",     new RegisterOverlay("EFLAGS",   8, 8));
-        m_regOverlays.put("IF",     new RegisterOverlay("EFLAGS",   9, 9));
-        m_regOverlays.put("DF",     new RegisterOverlay("EFLAGS",  10,10));
-        m_regOverlays.put("OF",     new RegisterOverlay("EFLAGS",  11,11));
-        m_regOverlays.put("IOPL",   new RegisterOverlay("EFLAGS",  13,12));
-        m_regOverlays.put("NT",     new RegisterOverlay("EFLAGS",  14,14));
-        m_regOverlays.put("RF",     new RegisterOverlay("EFLAGS",  16,16));
-        m_regOverlays.put("VM",     new RegisterOverlay("EFLAGS",  17,17));
-        m_regOverlays.put("AC",     new RegisterOverlay("EFLAGS",  18,18));
-        m_regOverlays.put("VIF",    new RegisterOverlay("EFLAGS",  19,19));
-        m_regOverlays.put("VIP",    new RegisterOverlay("EFLAGS",  20,20));
-        m_regOverlays.put("ID",     new RegisterOverlay("EFLAGS",  21,21));
+        m_regOverlays = new TreeMap<RegisterType, RegisterOverlay>();
+        m_regOverlays.put(RegisterType.RAX,    new RegisterOverlay(RegisterType.RAX,     63, 0));
+        m_regOverlays.put(RegisterType.EAX,    new RegisterOverlay(RegisterType.RAX,     31, 0));
+        m_regOverlays.put(RegisterType.AX,     new RegisterOverlay(RegisterType.RAX,     15, 0));
+        m_regOverlays.put(RegisterType.AH,     new RegisterOverlay(RegisterType.RAX,     15, 8));
+        m_regOverlays.put(RegisterType.AL,     new RegisterOverlay(RegisterType.RAX,      7, 0));
+        m_regOverlays.put(RegisterType.RBX,    new RegisterOverlay(RegisterType.RBX,     63, 0));
+        m_regOverlays.put(RegisterType.EBX,    new RegisterOverlay(RegisterType.RBX,     31, 0));
+        m_regOverlays.put(RegisterType.BX,     new RegisterOverlay(RegisterType.RBX,     15, 0));
+        m_regOverlays.put(RegisterType.BH,     new RegisterOverlay(RegisterType.RBX,     15, 8));
+        m_regOverlays.put(RegisterType.BL,     new RegisterOverlay(RegisterType.RBX,      7, 0));
+        m_regOverlays.put(RegisterType.RCX,    new RegisterOverlay(RegisterType.RCX,     63, 0));
+        m_regOverlays.put(RegisterType.ECX,    new RegisterOverlay(RegisterType.RCX,     31, 0));
+        m_regOverlays.put(RegisterType.CX,     new RegisterOverlay(RegisterType.RCX,     15, 0));
+        m_regOverlays.put(RegisterType.CH,     new RegisterOverlay(RegisterType.RCX,     15, 8));
+        m_regOverlays.put(RegisterType.CL,     new RegisterOverlay(RegisterType.RCX,      7, 0));
+        m_regOverlays.put(RegisterType.RDX,    new RegisterOverlay(RegisterType.RDX,     63, 0));
+        m_regOverlays.put(RegisterType.EDX,    new RegisterOverlay(RegisterType.RDX,     31, 0));
+        m_regOverlays.put(RegisterType.DX,     new RegisterOverlay(RegisterType.RDX,     15, 0));
+        m_regOverlays.put(RegisterType.DH,     new RegisterOverlay(RegisterType.RDX,     15, 8));
+        m_regOverlays.put(RegisterType.DL,     new RegisterOverlay(RegisterType.RDX,      7, 0));
+        m_regOverlays.put(RegisterType.RSP,    new RegisterOverlay(RegisterType.RSP,     63, 0));
+        m_regOverlays.put(RegisterType.ESP,    new RegisterOverlay(RegisterType.RSP,     31, 0));
+        m_regOverlays.put(RegisterType.SP,     new RegisterOverlay(RegisterType.RSP,     15, 0));
+        m_regOverlays.put(RegisterType.SPL,    new RegisterOverlay(RegisterType.RSP,      7, 0));
+        m_regOverlays.put(RegisterType.RBP,    new RegisterOverlay(RegisterType.RBP,     63, 0));
+        m_regOverlays.put(RegisterType.EBP,    new RegisterOverlay(RegisterType.RBP,     31, 0));
+        m_regOverlays.put(RegisterType.BP,     new RegisterOverlay(RegisterType.RBP,     15, 0));
+        m_regOverlays.put(RegisterType.BPL,    new RegisterOverlay(RegisterType.RBP,      7, 0));
+        m_regOverlays.put(RegisterType.RSI,    new RegisterOverlay(RegisterType.RSI,     63, 0));
+        m_regOverlays.put(RegisterType.ESI,    new RegisterOverlay(RegisterType.RSI,     31, 0));
+        m_regOverlays.put(RegisterType.SI ,    new RegisterOverlay(RegisterType.RSI,     15, 0));
+        m_regOverlays.put(RegisterType.SIL,    new RegisterOverlay(RegisterType.RSI,      7, 0));
+        m_regOverlays.put(RegisterType.RDI,    new RegisterOverlay(RegisterType.RDI,     63, 0));
+        m_regOverlays.put(RegisterType.EDI,    new RegisterOverlay(RegisterType.RDI,     31, 0));
+        m_regOverlays.put(RegisterType.DI,     new RegisterOverlay(RegisterType.RDI,     15, 0));
+        m_regOverlays.put(RegisterType.DIL,    new RegisterOverlay(RegisterType.RDI,      7, 0));
+        m_regOverlays.put(RegisterType.R8,     new RegisterOverlay(RegisterType.R8,      63, 0));
+        m_regOverlays.put(RegisterType.R8D,    new RegisterOverlay(RegisterType.R8,      31, 0));
+        m_regOverlays.put(RegisterType.R8W,    new RegisterOverlay(RegisterType.R8,      15, 0));
+        m_regOverlays.put(RegisterType.R8B,    new RegisterOverlay(RegisterType.R8,       7, 0));
+        m_regOverlays.put(RegisterType.R9,     new RegisterOverlay(RegisterType.R9,      63, 0));
+        m_regOverlays.put(RegisterType.R9D,    new RegisterOverlay(RegisterType.R9,      31, 0));
+        m_regOverlays.put(RegisterType.R9W,    new RegisterOverlay(RegisterType.R9,      15, 0));
+        m_regOverlays.put(RegisterType.R9B,    new RegisterOverlay(RegisterType.R9,       7, 0));
+        m_regOverlays.put(RegisterType.R10,    new RegisterOverlay(RegisterType.R10,     63, 0));
+        m_regOverlays.put(RegisterType.R10D,   new RegisterOverlay(RegisterType.R10,     31, 0));
+        m_regOverlays.put(RegisterType.R10W,   new RegisterOverlay(RegisterType.R10,     15, 0));
+        m_regOverlays.put(RegisterType.R10B,   new RegisterOverlay(RegisterType.R10,      7, 0));
+        m_regOverlays.put(RegisterType.R11,    new RegisterOverlay(RegisterType.R11,     63, 0));
+        m_regOverlays.put(RegisterType.R11D,   new RegisterOverlay(RegisterType.R11,     31, 0));
+        m_regOverlays.put(RegisterType.R11W,   new RegisterOverlay(RegisterType.R11,     15, 0));
+        m_regOverlays.put(RegisterType.R11B,   new RegisterOverlay(RegisterType.R11,      7, 0));
+        m_regOverlays.put(RegisterType.R12,    new RegisterOverlay(RegisterType.R12,     63, 0));
+        m_regOverlays.put(RegisterType.R12D,   new RegisterOverlay(RegisterType.R12,     31, 0));
+        m_regOverlays.put(RegisterType.R12W,   new RegisterOverlay(RegisterType.R12,     15, 0));
+        m_regOverlays.put(RegisterType.R12B,   new RegisterOverlay(RegisterType.R12,      7, 0));
+        m_regOverlays.put(RegisterType.R13,    new RegisterOverlay(RegisterType.R13,     63, 0));
+        m_regOverlays.put(RegisterType.R13D,   new RegisterOverlay(RegisterType.R13,     31, 0));
+        m_regOverlays.put(RegisterType.R13W,   new RegisterOverlay(RegisterType.R13,     15, 0));
+        m_regOverlays.put(RegisterType.R13B,   new RegisterOverlay(RegisterType.R13,      7, 0));
+        m_regOverlays.put(RegisterType.R14,    new RegisterOverlay(RegisterType.R14,     63, 0));
+        m_regOverlays.put(RegisterType.R14D,   new RegisterOverlay(RegisterType.R14,     31, 0));
+        m_regOverlays.put(RegisterType.R14W,   new RegisterOverlay(RegisterType.R14,     15, 0));
+        m_regOverlays.put(RegisterType.R14B,   new RegisterOverlay(RegisterType.R14,      7, 0));
+        m_regOverlays.put(RegisterType.R15,    new RegisterOverlay(RegisterType.R15,     63, 0));
+        m_regOverlays.put(RegisterType.R15D,   new RegisterOverlay(RegisterType.R15,     31, 0));
+        m_regOverlays.put(RegisterType.R15W,   new RegisterOverlay(RegisterType.R15,     15, 0));
+        m_regOverlays.put(RegisterType.R15B,   new RegisterOverlay(RegisterType.R15,      7, 0));
+        m_regOverlays.put(RegisterType.SS,     new RegisterOverlay(RegisterType.SS,      15, 0));
+        m_regOverlays.put(RegisterType.CS,     new RegisterOverlay(RegisterType.CS,      15, 0));
+        m_regOverlays.put(RegisterType.DS,     new RegisterOverlay(RegisterType.DS,      15, 0));
+        m_regOverlays.put(RegisterType.ES,     new RegisterOverlay(RegisterType.ES,      15, 0));
+        m_regOverlays.put(RegisterType.ES,     new RegisterOverlay(RegisterType.ES,      15, 0));
+        m_regOverlays.put(RegisterType.GS,     new RegisterOverlay(RegisterType.GS,      15, 0));
+        m_regOverlays.put(RegisterType.EFLAGS, new RegisterOverlay(RegisterType.EFLAGS,  31, 0));
+        m_regOverlays.put(RegisterType.CF,     new RegisterOverlay(RegisterType.EFLAGS,   0, 0));
+        m_regOverlays.put(RegisterType.PF,     new RegisterOverlay(RegisterType.EFLAGS,   2, 2));
+        m_regOverlays.put(RegisterType.AF,     new RegisterOverlay(RegisterType.EFLAGS,   4, 4));
+        m_regOverlays.put(RegisterType.ZF,     new RegisterOverlay(RegisterType.EFLAGS,   6, 6));
+        m_regOverlays.put(RegisterType.SF,     new RegisterOverlay(RegisterType.EFLAGS,   7, 7));
+        m_regOverlays.put(RegisterType.TF,     new RegisterOverlay(RegisterType.EFLAGS,   8, 8));
+        m_regOverlays.put(RegisterType.IF,     new RegisterOverlay(RegisterType.EFLAGS,   9, 9));
+        m_regOverlays.put(RegisterType.DF,     new RegisterOverlay(RegisterType.EFLAGS,  10,10));
+        m_regOverlays.put(RegisterType.OF,     new RegisterOverlay(RegisterType.EFLAGS,  11,11));
+        m_regOverlays.put(RegisterType.IOPL,   new RegisterOverlay(RegisterType.EFLAGS,  13,12));
+        m_regOverlays.put(RegisterType.NT,     new RegisterOverlay(RegisterType.EFLAGS,  14,14));
+        m_regOverlays.put(RegisterType.RF,     new RegisterOverlay(RegisterType.EFLAGS,  16,16));
+        m_regOverlays.put(RegisterType.VM,     new RegisterOverlay(RegisterType.EFLAGS,  17,17));
+        m_regOverlays.put(RegisterType.AC,     new RegisterOverlay(RegisterType.EFLAGS,  18,18));
+        m_regOverlays.put(RegisterType.VIF,    new RegisterOverlay(RegisterType.EFLAGS,  19,19));
+        m_regOverlays.put(RegisterType.VIP,    new RegisterOverlay(RegisterType.EFLAGS,  20,20));
+        m_regOverlays.put(RegisterType.ID,     new RegisterOverlay(RegisterType.EFLAGS,  21,21));
         
-        m_naturalRegs = new TreeMap<String, Register>();
-        m_naturalRegs.put("RAX",     new Register());
-        m_naturalRegs.put("RBX",     new Register());
-        m_naturalRegs.put("RCX",     new Register());
-        m_naturalRegs.put("RDX",     new Register());
-        m_naturalRegs.put("RSP",     new Register());
-        m_naturalRegs.put("RBP",     new Register());
-        m_naturalRegs.put("RSI",     new Register());
-        m_naturalRegs.put("RDI",     new Register());
-        m_naturalRegs.put("RIP",     new Register());
-        m_naturalRegs.put("R8",      new Register());
-        m_naturalRegs.put("R9",      new Register());
-        m_naturalRegs.put("R10",     new Register());
-        m_naturalRegs.put("R11",     new Register());
-        m_naturalRegs.put("R12",     new Register());
-        m_naturalRegs.put("R13",     new Register());
-        m_naturalRegs.put("R14",     new Register());
-        m_naturalRegs.put("R15",     new Register());
-        m_naturalRegs.put("R16",     new Register());
-        m_naturalRegs.put("SS",      new Register());
-        m_naturalRegs.put("CS",      new Register());
-        m_naturalRegs.put("DS",      new Register());
-        m_naturalRegs.put("ES",      new Register());
-        m_naturalRegs.put("FS",      new Register());
-        m_naturalRegs.put("GS",      new Register());
-        m_naturalRegs.put("EFLAGS",  new Register());
+        m_naturalRegs = new TreeMap<RegisterType, Register>();
+        m_naturalRegs.put(RegisterType.RAX,     new Register());
+        m_naturalRegs.put(RegisterType.RBX,     new Register());
+        m_naturalRegs.put(RegisterType.RCX,     new Register());
+        m_naturalRegs.put(RegisterType.RDX,     new Register());
+        m_naturalRegs.put(RegisterType.RSP,     new Register());
+        m_naturalRegs.put(RegisterType.RBP,     new Register());
+        m_naturalRegs.put(RegisterType.RSI,     new Register());
+        m_naturalRegs.put(RegisterType.RDI,     new Register());
+        m_naturalRegs.put(RegisterType.RIP,     new Register());
+        m_naturalRegs.put(RegisterType.R8,      new Register());
+        m_naturalRegs.put(RegisterType.R9,      new Register());
+        m_naturalRegs.put(RegisterType.R10,     new Register());
+        m_naturalRegs.put(RegisterType.R11,     new Register());
+        m_naturalRegs.put(RegisterType.R12,     new Register());
+        m_naturalRegs.put(RegisterType.R13,     new Register());
+        m_naturalRegs.put(RegisterType.R14,     new Register());
+        m_naturalRegs.put(RegisterType.R15,     new Register());
+        m_naturalRegs.put(RegisterType.SS,      new Register());
+        m_naturalRegs.put(RegisterType.CS,      new Register());
+        m_naturalRegs.put(RegisterType.DS,      new Register());
+        m_naturalRegs.put(RegisterType.ES,      new Register());
+        m_naturalRegs.put(RegisterType.ES,      new Register());
+        m_naturalRegs.put(RegisterType.GS,      new Register());
+        m_naturalRegs.put(RegisterType.EFLAGS,  new Register());
     }
 
     //Sets a register in the register bank
-    public void setValue(String name, long value){
-        RegisterOverlay overlay = m_regOverlays.get(name); 
-        m_naturalRegs.get(overlay.ParentRegisterName).setValue(value, overlay.MSB, overlay.LSB);
+    public void setValue(RegisterType name, long value){
+        if(m_regOverlays.containsKey(name)){
+            RegisterOverlay overlay = m_regOverlays.get(name); 
+            m_naturalRegs.get(overlay.ParentRegisterName).setValue(value, overlay.MSB, overlay.LSB);
+        } else {
+            System.out.println("WARNING: Register " + name.name() + " not found");
+        }
     }
     
-    public void getValue(String name){
+    public long getValue(RegisterType name){
+        
         RegisterOverlay overlay = m_regOverlays.get(name);
-        m_naturalRegs.get(overlay.ParentRegisterName).getValue(overlay.MSB, overlay.LSB);
+        
+        if(!m_regOverlays.containsKey(name)){
+            System.out.println("WARNING: Register " + name.name() + " not found");    
+        }
+        
+        return m_naturalRegs.get(overlay.ParentRegisterName).getValue(overlay.MSB, overlay.LSB);
+    }
+     
+    public int getWidth(RegisterType name){
+        
+        RegisterOverlay overlay = m_regOverlays.get(name);
+        return overlay.MSB - overlay.LSB + 1;
     }
     
 }
