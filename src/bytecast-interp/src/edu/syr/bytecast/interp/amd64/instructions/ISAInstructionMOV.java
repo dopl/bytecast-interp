@@ -16,16 +16,9 @@
  *
  */
 
-package edu.syr.bytecast.interp.amd64;
-import edu.syr.bytecast.amd64.api.constants.InstructionType;
-import edu.syr.bytecast.interp.amd64.instructions.*;
-import java.util.Map;
-import java.util.TreeMap;
+package edu.syr.bytecast.interp.amd64.instructions;
 
 
-public class ISA {
-    private static final Map<InstructionType, IISAInstruction> m_instructions = new TreeMap();
-    static {
-        m_instructions.put(InstructionType.ADD, new ISAInstructionADD());       
-    }
+public class ISAInstructionMOV {
+
 }

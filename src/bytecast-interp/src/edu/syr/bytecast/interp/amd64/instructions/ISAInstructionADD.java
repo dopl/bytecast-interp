@@ -31,12 +31,12 @@ import java.util.List;
 public class ISAInstructionADD implements IISAInstruction {
     
     @Override
-    public InstructionType getInstructionType(InstructionType instruction) {
+    public InstructionType getInstructionType() {
         return InstructionType.ADD;
     }
 
     @Override
-    public void execute(AMD64Environment env, IInstruction instruction) {
+    public long execute(AMD64Environment env, IInstruction instruction) {
        List<IOperand> operands = instruction.getOperands();
        if(operands.size() == 2)
        {
@@ -59,7 +59,7 @@ public class ISAInstructionADD implements IISAInstruction {
                env.setValue(RegisterType.CF, 0);              
            }
        }
-
+       return 0;
     }
     
     private static boolean checkOverflow(long a, long b, int width)
