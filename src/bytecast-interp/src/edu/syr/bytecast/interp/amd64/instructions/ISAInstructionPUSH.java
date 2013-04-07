@@ -60,5 +60,4 @@ public class ISAInstructionPUSH implements IISAInstruction {
         
         return 0;
     }
-
 }
