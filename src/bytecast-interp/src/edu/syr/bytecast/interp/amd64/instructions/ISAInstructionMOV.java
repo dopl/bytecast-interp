@@ -18,7 +18,22 @@
 
 package edu.syr.bytecast.interp.amd64.instructions;
 
+import edu.syr.bytecast.amd64.api.constants.InstructionType;
+import edu.syr.bytecast.amd64.api.instruction.IInstruction;
+import edu.syr.bytecast.interp.amd64.AMD64Environment;
+import edu.syr.bytecast.interp.amd64.IISAInstruction;
 
-public class ISAInstructionMOV {
+
+public class ISAInstructionMOV implements IISAInstruction {
+
+  @Override
+  public InstructionType getInstructionType() {
+      return InstructionType.MOV;
+  }
+
+  @Override
+  public long execute(AMD64Environment env, IInstruction instruction) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
 
 }
