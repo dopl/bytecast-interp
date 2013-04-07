@@ -18,7 +18,47 @@
 
 package edu.syr.bytecast.interp.amd64.instructions;
 
+import edu.syr.bytecast.amd64.api.constants.InstructionType;
+import edu.syr.bytecast.amd64.api.constants.RegisterType;
+import edu.syr.bytecast.amd64.api.instruction.IInstruction;
+import edu.syr.bytecast.amd64.api.instruction.IOperand;
+import edu.syr.bytecast.interp.amd64.AMD64Environment;
+import edu.syr.bytecast.interp.amd64.IISAInstruction;
+import java.util.List;
 
-public class ISAInstructionPUSH {
+
+public class ISAInstructionPUSH implements IISAInstruction {
+
+    @Override
+    public InstructionType getInstructionType() {
+        return InstructionType.PUSH;
+    }
+
+    @Override
+    public long execute(AMD64Environment env, IInstruction instruction) {
+        List<IOperand> ops = instruction.getOperands();
+        
+        if(ops.size() == 1){
+            IOperand op = ops.get(0);
+            
+            //find the number of bytes of the value to be added
+            int operand_width_bytes = env.getOperandWidth(op)/8;
+            
+            //Get the stack segment value
+            long ss = env.getValue(RegisterType.SS);
+            
+            //Get the current stack pointer value;
+            long sp = env.getValue(RegisterType.RSP);
+            
+            //Subtract the operand width from SP to set new SP
+            sp = sp-operand_width_bytes;
+            env.setValue(RegisterType.RSP, sp);
+            
+            //Set the memory location contained in SS:RSP to the operand contents
+            env.setValue(ss+sp, op);
+        }
+        
+        return 0;
+    }
 
 }

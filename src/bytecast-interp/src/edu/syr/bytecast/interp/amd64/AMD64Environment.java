@@ -31,16 +31,15 @@ public class AMD64Environment {
     public AMD64Environment(){
         m_memory    = new Memory();
         m_regbank   = new RegisterBank();
-        m_stack     = new Stack<Long>();
     }
     
+    //Get the contents of a register
     public long getValue(RegisterType register) {
         long ret;
         ret = m_regbank.getValue(register);    
         return ret;
     }
 
-        
     public long getValue(OperandTypeMemoryEffectiveAddress addr) {
         RegisterType baseReg  = addr.getBase();
         RegisterType indexReg = addr.getIndex();
@@ -103,6 +102,14 @@ public class AMD64Environment {
         m_regbank.setValue(reg, value);        
     }
     
+    //set a memory location to operand contents
+    public void setValue(long address, IOperand operand)
+    {
+        long value = getValue(operand);
+        long num_bits = getOperandWidth(operand);
+        m_memory.setValue(address, value, num_bits);
+    }   
+    
     public int getOperandWidth(IOperand op){
         int width = 64;
         switch(op.getOperandType())
@@ -120,5 +127,4 @@ public class AMD64Environment {
     
     public Memory        m_memory;
     public RegisterBank  m_regbank;
-    public Stack<Long>   m_stack;
 }
