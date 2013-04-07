@@ -16,24 +16,12 @@
  *
  */
 
-package edu.syr.bytecast.interp.amd64.instructions;
+package bytecast.interp.test;
 
-import edu.syr.bytecast.amd64.api.constants.InstructionType;
-import edu.syr.bytecast.amd64.api.instruction.IInstruction;
-import edu.syr.bytecast.interp.amd64.AMD64Environment;
-import edu.syr.bytecast.interp.amd64.IISAInstruction;
+public class TestInterp {
 
-
-public class ISAInstructionCALLQ implements IISAInstruction {
-
-  @Override
-  public InstructionType getInstructionType() {
-      return InstructionType.CALLQ;
+  public int test(String filename) {
+    return 1;
   }
-
-  @Override
-  public long execute(AMD64Environment env, IInstruction instruction) {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
+  
 }
