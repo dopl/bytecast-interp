@@ -21,7 +21,7 @@ package bytecast.interp.test;
 public class TestInterp {
 
   public int test(String filename) {
-    return 1;
+    return -1;
   }
   
 }

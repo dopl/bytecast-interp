@@ -19,8 +19,10 @@
 package bytecast.interp.test;
 
 import edu.syr.bytecast.util.ReadFileAsString;
+import edu.syr.bytecast.util.RunProcess;
 import edu.syr.bytecast.util.WriteStringAsFile;
 import java.io.File;
+import java.util.List;
 
 public class TestCPU {
 
@@ -34,6 +36,7 @@ public class TestCPU {
   
   public int test(String filename, String template) {
     try {
+      //build complete .s file
       String test_str = m_fileReader.read(filename);
       String template_str = m_fileReader.read(template);
       template_str = template_str.replace("code", test_str);
@@ -43,8 +46,24 @@ public class TestCPU {
       }
       String dest_filename = "temp" + File.separator + "cpu_test.s";
       m_fileWriter.write(dest_filename, template_str);
-      return 0;
+      
+      String aout_filename = "temp" + File.separator + "a.out";
+      File aout_file = new File(aout_filename);
+      if(aout_file.exists()){
+        aout_file.delete();
+      }
+      
+      //compile .s file
+      RunProcess runner1 = new RunProcess();
+      runner1.exec("gcc cpu_test.s", new File("temp"));
+      
+      //run test case
+      RunProcess runner2 = new RunProcess();
+      int ret = runner2.exec("./a.out", new File("temp"));
+      
+      return ret;
     } catch(Exception ex){
+      ex.printStackTrace();
       return -1;
     }
   }
