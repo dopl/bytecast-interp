@@ -18,14 +18,10 @@
 
 package edu.syr.bytecast.interp.amd64.instructions;
 
-import edu.syr.bytecast.interp.amd64.*;
 import edu.syr.bytecast.amd64.api.constants.*;
 import edu.syr.bytecast.amd64.api.instruction.IInstruction;
 import edu.syr.bytecast.amd64.api.instruction.IOperand;
-import edu.syr.bytecast.amd64.impl.instruction.AMD64Instruction;
-import edu.syr.bytecast.amd64.impl.instruction.operand.*;
-
-import java.util.ArrayList;
+import edu.syr.bytecast.interp.amd64.*;
 import java.util.List;
 
 public class ISAInstructionADD implements IISAInstruction {
@@ -43,44 +39,68 @@ public class ISAInstructionADD implements IISAInstruction {
            IOperand op1 = operands.get(0);
            IOperand op2 = operands.get(1);
            
-           long val1= env.getValue(op1);
-           long val2= env.getValue(op2);
+           int op_width1 = env.getOperandWidth(op1);
+           int op_width2 = env.getOperandWidth(op1);
+           
+           long val1= env.getValue(op1, op_width1);
+           long val2= env.getValue(op2, op_width2);
            
            long sum = val1 + val2;
 
-           env.setValue(op1, sum);
-           int result_width = env.getOperandWidth(op1);
-           if(checkOverflow(val1,val2,result_width)){
+           env.setValue(op1, sum, op_width1);
+           long returned = env.getValue(op1, op_width1);   
+
+           if(checkOverflow(val1,val2,returned)){
                env.setValue(RegisterType.OF, 1);
+           }
+           else {
+               env.setValue(RegisterType.OF, 0);           
+           }
+           
+           if(checkCarry(val1,val2,returned)){
                env.setValue(RegisterType.CF, 1);
            }
            else {
-               env.setValue(RegisterType.OF, 0);
                env.setValue(RegisterType.CF, 0);              
+           }    
+           
+           if(returned == 0){
+               env.setValue(RegisterType.ZF, 1);
+           } else {
+               env.setValue(RegisterType.ZF, 0);
+           }
+           
+           if(returned < 0){
+              env.setValue(RegisterType.SF, 1);
+           } else {
+              env.setValue(RegisterType.SF, 0); 
+           }
+           
+           if(ISAUtil.isEvenParity(returned)){
+               env.setValue(RegisterType.PF, 1);
+           } else {
+               env.setValue(RegisterType.PF, 0);
            }
        }
        return 0;
     }
     
-    private static boolean checkOverflow(long a, long b, int width)
+    private static boolean checkOverflow(long a, long b, long result)
     {
-        boolean ret = false;
-        
-        //This will guarantee a <= b
-        if(a > b){
-            ret = checkOverflow(b,a,width);
-        } else {
-            long max_value = 1 << (width-1)-1;
-            long min_value = -max_value - 1;
-            
-            //check max negative case
-            if(a < 0 && b < 0 && (min_value - b) > a) {
-                ret = true;
-            } else if( a > (max_value - b)) { // check max positive case
-                ret = true;
-            }
-        }
-        return ret;
+        if(a > 0 && b > 0 && result < 0)
+            return true;
+        else if (a < 0 && b < 0 && result > 0)
+            return true;
+        else
+            return false;
     }
-
+    
+    private static boolean checkCarry(long a, long b, long result){
+        if(a > 0 && b < 0 && result > 0)
+            return true;
+        else if(a < 0 && b < 0)
+            return true;
+        else
+            return false;                              
+    }
 }

@@ -33,7 +33,7 @@ public class ISAInstructionNOP implements IISAInstruction {
 
   @Override
   public long execute(AMD64Environment env, IInstruction instruction) {
-    throw new UnsupportedOperationException("Not supported yet.");
+      return 0;
   }
 
 }

@@ -170,11 +170,12 @@ public class RegisterBank {
         
         return m_naturalRegs.get(overlay.ParentRegisterName).getValue(overlay.MSB, overlay.LSB);
     }
-     
+    
+    //Get the number of bytes in a register
     public int getWidth(RegisterType name){
         
         RegisterOverlay overlay = m_regOverlays.get(name);
-        return overlay.MSB - overlay.LSB + 1;
+        return (overlay.MSB - overlay.LSB + 1)/8;
     }
     
 }

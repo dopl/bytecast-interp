@@ -40,7 +40,8 @@ public class AMD64Environment {
         return ret;
     }
 
-    public long getValue(OperandTypeMemoryEffectiveAddress addr) {
+    //get the value from a memory address
+    public long getValue(OperandTypeMemoryEffectiveAddress addr, int width) {
         RegisterType baseReg  = addr.getBase();
         RegisterType indexReg = addr.getIndex();
         long scale = addr.getScale();
@@ -54,10 +55,17 @@ public class AMD64Environment {
             index = getValue(indexReg);
         }
         
-        return base+index*scale+offset;
+        return m_memory.getValue(base+index*scale+offset,width);
+    }
+ 
+
+    //get the value from a memory address
+    public long getValue(long addr, int num_bytes) {
+        return m_memory.getValue(addr,  num_bytes);
     }
     
-    public long getValue(IOperand op) {
+    //Get the value from an operand
+    public long getValue(IOperand op, int width) {
         long ret = 0;
         switch(op.getOperandType())
         {
@@ -75,7 +83,7 @@ public class AMD64Environment {
                 break;
             
             case MEMORY_EFFECITVE_ADDRESS:
-                ret = getValue((OperandTypeMemoryEffectiveAddress)op.getOperandValue());
+                ret = getValue((OperandTypeMemoryEffectiveAddress)op.getOperandValue(), width);
                 break; 
                 
             default: break;
@@ -84,14 +92,15 @@ public class AMD64Environment {
         return ret;
     }
 
-    
-    public void setValue(IOperand op, long value) {
+    //set the value of an operand
+    public void setValue(IOperand op, long value, int width) {
         switch(op.getOperandType())
         {
             case REGISTER:
                 RegisterType register = (RegisterType)op.getOperandValue();
                 setValue(register, value);
                 break;
+            
                        
             default: break;
         }
@@ -103,12 +112,12 @@ public class AMD64Environment {
     }
     
     //set a memory location to operand contents
-    public void setValue(long address, IOperand operand)
+    public void setValue(long address, IOperand operand, int width)
     {
-        long value = getValue(operand);
-        long num_bits = getOperandWidth(operand);
-        m_memory.setValue(address, value, num_bits);
+        long value = getValue(operand, width);
+        m_memory.setValue(address, value, width);
     }   
+    
     
     public int getOperandWidth(IOperand op){
         int width = 64;
@@ -118,8 +127,14 @@ public class AMD64Environment {
                 RegisterType register = (RegisterType)op.getOperandValue();
                 width = m_regbank.getWidth(register);
                 break;
+            
+            case MEMORY_EFFECITVE_ADDRESS:
+                OperandTypeMemoryEffectiveAddress op_conv = (OperandTypeMemoryEffectiveAddress)op;
+                width = m_regbank.getWidth(op_conv.getBase());
                        
-            default: break;
+            default: 
+                width = 8;
+                break;
         }
         
         return width;
