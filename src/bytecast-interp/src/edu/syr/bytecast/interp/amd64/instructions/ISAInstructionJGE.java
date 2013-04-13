@@ -23,6 +23,7 @@ import edu.syr.bytecast.amd64.api.instruction.IInstruction;
 import edu.syr.bytecast.amd64.api.instruction.IOperand;
 import edu.syr.bytecast.interp.amd64.AMD64Environment;
 import edu.syr.bytecast.interp.amd64.IISAInstruction;
+import java.util.List;
 
 public class ISAInstructionJGE implements IISAInstruction {
 
@@ -33,7 +34,13 @@ public class ISAInstructionJGE implements IISAInstruction {
 
   @Override
   public long execute(AMD64Environment env, IInstruction instruction) {
-    IOperand op = instruction.getOperands().get(0);
+    List<IOperand> operands = instruction.getOperands();
+    
+    if(operands == null || operands.size() != 1) {
+      return 0;
+    }
+    
+    IOperand op = operands.get(0);
     int width = env.getOperandWidth(op);
     long addr = env.getValue(op, width);
     
