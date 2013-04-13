@@ -79,31 +79,54 @@ public class AMD64ExecutionEngine implements IBytecastInterp {
         call_stack.push(new IndexPair(entry_point_index, 0));
         
         //Start execution from the call stack
-        executeCallStack();
+        executeCallStack(call_stack, sections);
         
         //Return value of EAX
         return m_env.getValue(RegisterType.EAX);
     }
    
-    private void executeCallStack() {
-         while(!m_callStack.empty()){
-            IndexPair curr_pair = m_callStack.pop();
-            List<MemoryInstructionPair> instructions = sections.get(curr_pair.getIndex1()).getAllInstructionObjects();
+    private void executeCallStack(Stack<IndexPair> call_stack, List<ISection> sections) {
+
+        //loop until all instructions have ben executed
+        while(!call_stack.empty()){
+            IndexPair curr_pair = call_stack.pop();
             
+            int curr_section_idx = curr_pair.getIndex1();
             int curr_instr_idx = curr_pair.getIndex2();
-           
-            IInstruction curr_inst = instructions.get(curr_instr_idx).getInstruction();
-            InstructionType curr_inst_type = curr_inst.getInstructiontype();
             
-            long next_instr_addr=0;
-            while(next_instr_addr == 0)
+            //Get all instructions in this section
+            List<MemoryInstructionPair> instructions = sections.get(curr_section_idx).getAllInstructionObjects();
+  
+            //A jump address of zero means no jump
+            long jump_addr=0;
+            
+            //Loop until a branch or the end of the section is reached.
+            while(jump_addr == 0 && curr_instr_idx < instructions.size())
             {
-                next_instr_addr = m_instructions.get(curr_inst_type).execute(m_env, curr_inst);
                 
-                if(next_instr_addr != 0)
+                //Fetch the current instruction and instruction type
+                IInstruction curr_inst = instructions.get(curr_instr_idx).getInstruction();
+                InstructionType curr_inst_type = curr_inst.getInstructiontype();
+                
+                //Execute the instruction
+                jump_addr = m_instructions.get(curr_inst_type).execute(m_env, curr_inst);
+                
+                //If the instruction caused a jump, then push where to return
+                //after the jump has completed and then push the instruction
+                //being jumped to.
+                if(jump_addr != 0) {
+                    call_stack.push(new IndexPair(curr_section_idx, curr_instr_idx+1));
+                    call_stack.push(findInstruction(sections, jump_addr));
+                }
             }          
         }       
         
+    }
+    
+    private IndexPair findInstruction(List<ISection> input, long addr){
+        //Right now everything is in the first section...
+        int instructionIndex = input.get(0).indexOfInstructionAt(addr);
+        return new IndexPair(0,instructionIndex);
     }
     private void loadAllSegmentsToMemory(List <ExeObjSegment> segments){
         for(ExeObjSegment segment : segments) {
