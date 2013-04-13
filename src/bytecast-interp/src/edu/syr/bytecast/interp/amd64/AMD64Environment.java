@@ -109,6 +109,7 @@ public class AMD64Environment {
             case MEMORY_EFFECITVE_ADDRESS:
                 OperandTypeMemoryEffectiveAddress memOp = (OperandTypeMemoryEffectiveAddress)op.getOperandValue();
                 setValue(getMemoryAddress(memOp),op,width);
+                break;
                 
             
             default: break;

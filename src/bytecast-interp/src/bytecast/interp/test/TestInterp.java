@@ -18,9 +18,13 @@
 
 package bytecast.interp.test;
 
+import edu.syr.bytecast.amd64.api.instruction.IInstruction;
+import edu.syr.bytecast.amd64.util.StringToIInstruction;
+
 public class TestInterp {
 
   public int test(String filename) {
+    StringToIInstruction stoi = new StringToIInstruction();
     return -1;
   }
   

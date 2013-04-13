@@ -19,9 +19,13 @@
 package edu.syr.bytecast.interp.amd64.instructions;
 
 import edu.syr.bytecast.amd64.api.constants.InstructionType;
+import edu.syr.bytecast.amd64.api.constants.RegisterType;
 import edu.syr.bytecast.amd64.api.instruction.IInstruction;
+import edu.syr.bytecast.amd64.api.instruction.IOperand;
 import edu.syr.bytecast.interp.amd64.AMD64Environment;
 import edu.syr.bytecast.interp.amd64.IISAInstruction;
+import edu.syr.bytecast.interp.amd64.Register;
+import java.util.List;
 
 
 public class ISAInstructionSHR implements IISAInstruction {
@@ -33,7 +37,17 @@ public class ISAInstructionSHR implements IISAInstruction {
 
   @Override
   public long execute(AMD64Environment env, IInstruction instruction) {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
+     List<IOperand> operands = instruction.getOperands();
+        if (operands.size() == 1) {
+            IOperand op1 = operands.get(0);
 
+            int op_width1 = env.getOperandWidth(op1);
+
+            long val1 = env.getValue(op1, op_width1);
+
+            env.setValue(op1, val1>>1, op_width1);
+
+        }
+        return 0;
+    }
 }
