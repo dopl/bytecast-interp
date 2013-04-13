@@ -15,7 +15,6 @@
  * along with Bytecast.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
 package edu.syr.bytecast.interp.amd64.instructions;
 
 import edu.syr.bytecast.amd64.api.constants.InstructionType;
@@ -23,17 +22,15 @@ import edu.syr.bytecast.amd64.api.instruction.IInstruction;
 import edu.syr.bytecast.interp.amd64.AMD64Environment;
 import edu.syr.bytecast.interp.amd64.IISAInstruction;
 
-
 public class ISAInstructionRETQ implements IISAInstruction {
 
-  @Override
-  public InstructionType getInstructionType() {
-      return InstructionType.RETQ;
-  }
+    @Override
+    public InstructionType getInstructionType() {
+        return InstructionType.RETQ;
+    }
 
-  @Override
-  public long execute(AMD64Environment env, IInstruction instruction) {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
+    @Override
+    public long execute(AMD64Environment env, IInstruction instruction) {
+        return 0;
+    }
 }
