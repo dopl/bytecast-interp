@@ -64,6 +64,7 @@ public class AMD64ExecutionEngine implements IBytecastInterp {
     @Override
     public long runProgram(IExecutableFile input, String[] args) {
         
+        m_env.setValue(RegisterType.EDI, args.length);
         
         //Load all loadable content provided by fsys to the AMD64Environment 
         //memory
