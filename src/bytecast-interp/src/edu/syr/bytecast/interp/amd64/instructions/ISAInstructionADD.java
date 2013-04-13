@@ -40,7 +40,7 @@ public class ISAInstructionADD implements IISAInstruction {
            IOperand op2 = operands.get(1);
            
            int op_width1 = env.getOperandWidth(op1);
-           int op_width2 = env.getOperandWidth(op1);
+           int op_width2 = env.getOperandWidth(op2);
            
            long val1= env.getValue(op1, op_width1);
            long val2= env.getValue(op2, op_width2);
