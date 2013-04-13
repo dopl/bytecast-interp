@@ -16,16 +16,30 @@
  *
  */
 
-package bytecast.interp.test;
+package edu.syr.bytecast.interp.amd64;
 
-import edu.syr.bytecast.amd64.api.instruction.IInstruction;
-import edu.syr.bytecast.amd64.util.StringToIInstruction;
+public class IndexPair {
+    
+    public IndexPair(int index1, int index2){
+        m_index1 = index1;
+        m_index2 = index2;
+    }
 
-public class TestInterp {
+    public int getIndex1() {
+        return m_index1;
+    }
 
-  public int test(String filename) {
-    StringToIInstruction stoi = new StringToIInstruction();
-    return -1;
-  }
-  
+    public void setIndex1(int m_index1) {
+        this.m_index1 = m_index1;
+    }
+
+    public int getIndex2() {
+        return m_index2;
+    }
+
+    public void setIndex2(int m_index2) {
+        this.m_index2 = m_index2;
+    }
+    int      m_index1;
+    int      m_index2;
 }

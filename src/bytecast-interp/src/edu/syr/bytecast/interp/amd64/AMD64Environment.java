@@ -109,6 +109,7 @@ public class AMD64Environment {
             case MEMORY_EFFECITVE_ADDRESS:
                 OperandTypeMemoryEffectiveAddress memOp = (OperandTypeMemoryEffectiveAddress)op.getOperandValue();
                 setValue(getMemoryAddress(memOp),op,width);
+                break;
                 
             
             default: break;
@@ -126,7 +127,12 @@ public class AMD64Environment {
         long value = getValue(operand, width);
         m_memory.setValue(address, value, width);
     }   
-    
+
+    //set a memory location to long value
+    public void setValue(long address, long value, int width)
+    {
+        m_memory.setValue(address, value, width);
+    } 
     
     public int getOperandWidth(IOperand op){
         int width = 64;
