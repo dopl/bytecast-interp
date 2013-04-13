@@ -20,8 +20,10 @@ package edu.syr.bytecast.interp.amd64.instructions;
 
 import edu.syr.bytecast.amd64.api.constants.InstructionType;
 import edu.syr.bytecast.amd64.api.instruction.IInstruction;
+import edu.syr.bytecast.amd64.api.instruction.IOperand;
 import edu.syr.bytecast.interp.amd64.AMD64Environment;
 import edu.syr.bytecast.interp.amd64.IISAInstruction;
+import java.util.List;
 
 
 public class ISAInstructionCALLQ implements IISAInstruction {
@@ -33,7 +35,23 @@ public class ISAInstructionCALLQ implements IISAInstruction {
 
   @Override
   public long execute(AMD64Environment env, IInstruction instruction) {
-    throw new UnsupportedOperationException("Not supported yet.");
+      List<IOperand> operands = instruction.getOperands();
+      long ret = 0;
+      if(operands.size()==2)
+      {
+           IOperand op1 = operands.get(0);
+           //IOperand op2 = operands.get(1);
+           
+           int op_width1 = env.getOperandWidth(op1);
+           //int op_width2 = env.getOperandWidth(op2);
+           
+           long val1= env.getValue(op1, op_width1);
+           //long val2= env.getValue(op2, op_width2);
+
+           env.setValue(op1, val1, op_width1);
+           ret = val1;  
+      }
+      return ret ;
   }
 
 }
