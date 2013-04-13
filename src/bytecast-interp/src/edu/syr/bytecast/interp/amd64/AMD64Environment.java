@@ -39,9 +39,10 @@ public class AMD64Environment {
         ret = m_regbank.getValue(register);    
         return ret;
     }
-
-    //get the value from a memory address
-    public long getValue(OperandTypeMemoryEffectiveAddress addr, int width) {
+    
+    //Calculates a memory address from OperandTypeMemoryEffectiveAddress
+    private long getMemoryAddress(OperandTypeMemoryEffectiveAddress addr)
+    {
         RegisterType baseReg  = addr.getBase();
         RegisterType indexReg = addr.getIndex();
         long scale = addr.getScale();
@@ -53,9 +54,13 @@ public class AMD64Environment {
         }
         if(indexReg != null) {
             index = getValue(indexReg);
-        }
-        
-        return m_memory.getValue(base+index*scale+offset,width);
+        }      
+        return base+index*scale+offset;
+    }
+
+    //get the value from a memory address operand
+    public long getValue(OperandTypeMemoryEffectiveAddress op, int width) {
+        return m_memory.getValue(getMemoryAddress(op),width);
     }
  
 
@@ -64,7 +69,7 @@ public class AMD64Environment {
         return m_memory.getValue(addr,  num_bytes);
     }
     
-    //Get the value from an operand
+    //Get a value from an operand
     public long getValue(IOperand op, int width) {
         long ret = 0;
         switch(op.getOperandType())
@@ -100,8 +105,12 @@ public class AMD64Environment {
                 RegisterType register = (RegisterType)op.getOperandValue();
                 setValue(register, value);
                 break;
+                
+            case MEMORY_EFFECITVE_ADDRESS:
+                OperandTypeMemoryEffectiveAddress memOp = (OperandTypeMemoryEffectiveAddress)op.getOperandValue();
+                setValue(getMemoryAddress(memOp),op,width);
+                
             
-                       
             default: break;
         }
     }
