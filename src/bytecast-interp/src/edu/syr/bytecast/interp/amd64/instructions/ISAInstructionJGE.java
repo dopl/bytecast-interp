@@ -15,25 +15,33 @@
  * along with Bytecast.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-
 package edu.syr.bytecast.interp.amd64.instructions;
 
 import edu.syr.bytecast.amd64.api.constants.InstructionType;
+import edu.syr.bytecast.amd64.api.constants.RegisterType;
 import edu.syr.bytecast.amd64.api.instruction.IInstruction;
+import edu.syr.bytecast.amd64.api.instruction.IOperand;
 import edu.syr.bytecast.interp.amd64.AMD64Environment;
 import edu.syr.bytecast.interp.amd64.IISAInstruction;
-
 
 public class ISAInstructionJGE implements IISAInstruction {
 
   @Override
   public InstructionType getInstructionType() {
-      return InstructionType.JGE;
+    return InstructionType.JGE;
   }
 
   @Override
   public long execute(AMD64Environment env, IInstruction instruction) {
-    throw new UnsupportedOperationException("Not supported yet.");
+    IOperand op = instruction.getOperands().get(0);
+    int width = env.getOperandWidth(op);
+    long addr = env.getValue(op, width);
+    
+    long sf = env.getValue(RegisterType.SF);
+    long of = env.getValue(RegisterType.OF);
+    if (sf == of) {
+      return addr;
+    }
+    return 0;
   }
-
 }
