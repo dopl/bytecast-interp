@@ -33,12 +33,12 @@ public class BytecastInterpTest {
     List<String> failing = new ArrayList<String>();
     for(TestCase test_case : m_testCases){
       String filename = test_case.getFilename();
-      int cpu_ret = runCpu(filename);
-      int interp_ret = runInterp(filename);
-      
       int index = count + 1;
       File file = new File(filename);
       System.out.println("[Test "+index+"/"+m_testCases.size()+"]: "+file.getName());
+      int cpu_ret = runCpu(filename);
+      int interp_ret = runInterp(filename);
+      
       if(cpu_ret == interp_ret){
         System.out.println("  PASSED");
       } else {
@@ -86,6 +86,16 @@ public class BytecastInterpTest {
         }
         if(name.startsWith("template")){
           m_template = child.getAbsolutePath();
+        }
+      }
+    }
+    for(int i = 0; i < m_testCases.size(); ++i){
+      for(int j = i + 1; j < m_testCases.size(); ++j){
+        TestCase lhs = m_testCases.get(i);
+        TestCase rhs = m_testCases.get(j);
+        if(rhs.getFilename().compareTo(lhs.getFilename()) < 0){
+          m_testCases.set(i, rhs);
+          m_testCases.set(j, lhs);
         }
       }
     }
