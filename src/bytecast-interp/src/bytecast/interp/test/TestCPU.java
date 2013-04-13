@@ -63,8 +63,8 @@ public class TestCPU {
       
       return ret;
     } catch(Exception ex){
-      ex.printStackTrace();
-      return -1;
+      ex.printStackTrace(System.out);
+      return -100;
     }
   }
   
