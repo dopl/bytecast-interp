@@ -31,6 +31,6 @@ public class ISAInstructionRETQ implements IISAInstruction {
 
     @Override
     public long execute(AMD64Environment env, IInstruction instruction) {
-        return 0;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
