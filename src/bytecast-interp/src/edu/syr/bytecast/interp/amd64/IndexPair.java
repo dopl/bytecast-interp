@@ -17,12 +17,29 @@
  */
 
 package edu.syr.bytecast.interp.amd64;
-import edu.syr.bytecast.amd64.api.constants.InstructionType;
-import edu.syr.bytecast.interp.amd64.instructions.*;
-import java.util.Map;
-import java.util.TreeMap;
 
+public class IndexPair {
+    
+    public IndexPair(int index1, int index2){
+        m_index1 = index1;
+        m_index2 = index2;
+    }
 
-public class ISA {
+    public int getIndex1() {
+        return m_index1;
+    }
 
+    public void setIndex1(int m_index1) {
+        this.m_index1 = m_index1;
+    }
+
+    public int getIndex2() {
+        return m_index2;
+    }
+
+    public void setIndex2(int m_index2) {
+        this.m_index2 = m_index2;
+    }
+    int      m_index1;
+    int      m_index2;
 }
