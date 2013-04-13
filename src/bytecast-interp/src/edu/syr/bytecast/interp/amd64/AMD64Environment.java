@@ -144,7 +144,7 @@ public class AMD64Environment {
                 break;
             
             case MEMORY_EFFECITVE_ADDRESS:
-                OperandTypeMemoryEffectiveAddress op_conv = (OperandTypeMemoryEffectiveAddress)op;
+                OperandTypeMemoryEffectiveAddress op_conv = (OperandTypeMemoryEffectiveAddress)op.getOperandValue();
                 width = m_regbank.getWidth(op_conv.getBase());
                        
             default: 

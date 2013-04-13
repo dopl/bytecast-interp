@@ -18,6 +18,7 @@
 
 package edu.syr.bytecast.interp.amd64;
 
+import bytecast.interp.test.input.mockups.Test01InputMockup;
 import edu.syr.bytecast.amd64.api.constants.InstructionType;
 import edu.syr.bytecast.amd64.api.constants.RegisterType;
 import edu.syr.bytecast.amd64.api.instruction.IInstruction;
@@ -63,6 +64,7 @@ public class AMD64ExecutionEngine implements IBytecastInterp {
     
     @Override
     public long runProgram(IExecutableFile input, String[] args) {
+        m_env = new AMD64Environment();
         
         m_env.setValue(RegisterType.EDI, args.length);
         
@@ -119,6 +121,9 @@ public class AMD64ExecutionEngine implements IBytecastInterp {
                     call_stack.push(new IndexPair(curr_section_idx, curr_instr_idx+1));
                     call_stack.push(findInstruction(sections, jump_addr));
                 }
+                else{
+                    curr_instr_idx++;
+                }
             }          
         }       
         
@@ -147,6 +152,15 @@ public class AMD64ExecutionEngine implements IBytecastInterp {
             }
         }
         return -1;
+    }
+    
+    public static void main(String args[])
+    {
+        Test01InputMockup mock = new Test01InputMockup();
+        AMD64ExecutionEngine eng = new AMD64ExecutionEngine();
+        String[] arguments = {"test1", "test2", "test3"};
+        System.out.println(eng.runProgram(mock.buildInstructionObjects() , arguments));
+        
     }
 
 }

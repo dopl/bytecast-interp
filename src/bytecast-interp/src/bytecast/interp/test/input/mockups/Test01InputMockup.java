@@ -34,6 +34,7 @@ import edu.syr.bytecast.amd64.impl.instruction.operand.OperandSectionName;
 import edu.syr.bytecast.amd64.impl.output.AMD64ExecutableFile;
 import edu.syr.bytecast.amd64.impl.output.AMD64Section;
 import edu.syr.bytecast.interfaces.fsys.ExeObj;
+import edu.syr.bytecast.interfaces.fsys.ExeObjSegment;
 import edu.syr.bytecast.interfaces.fsys.IBytecastFsys;
 import edu.syr.bytecast.test.mockups.MockBytecastFsys;
 import java.util.ArrayList;
@@ -88,7 +89,7 @@ public class Test01InputMockup implements IBytecastAMD64{
         ISection section = new AMD64Section(memtoins, (long) 0x400584, true);
         sections.add(section);
         ExeObj fsysObj = new ExeObj();
-
+        fsysObj.setSegments(new ArrayList<ExeObjSegment>());
         IExecutableFile exeFile = new AMD64ExecutableFile(fsysObj.getSegments(), sections, "TEST_EXE_FILE", "ELF", null);
         return exeFile;
     }
