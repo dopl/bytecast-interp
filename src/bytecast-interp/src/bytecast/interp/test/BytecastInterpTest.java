@@ -33,11 +33,14 @@ public class BytecastInterpTest {
     List<String> failing = new ArrayList<String>();
     for(TestCase test_case : m_testCases){
       String filename = test_case.getFilename();
+      String[] args = test_case.getArgs();
+      
       int index = count + 1;
       File file = new File(filename);
       System.out.println("[Test "+index+"/"+m_testCases.size()+"]: "+file.getName());
-      int cpu_ret = runCpu(filename);
-      int interp_ret = runInterp(filename);
+      String compiled_path = new TestCompiler().compile(filename, m_template,args[0]);
+      int cpu_ret = runCpu(compiled_path,  args);
+      int interp_ret = runInterp(compiled_path, args);
       
       if(cpu_ret == interp_ret){
         System.out.println("  PASSED");
@@ -58,14 +61,14 @@ public class BytecastInterpTest {
     }
   }
   
-  private int runCpu(String filename){
+  private int runCpu(String filename, String[] args){
     TestCPU tester = new TestCPU();
-    return tester.test(filename, m_template);
+    return tester.test(filename, args);
   }
 
-  private int runInterp(String filename) {
+  private int runInterp(String filename, String[] args) {
     TestInterp tester = new TestInterp();
-    return tester.test(filename);
+    return tester.test(filename, args );
   }
   
   private void loadTestCases() {
@@ -82,7 +85,7 @@ public class BytecastInterpTest {
           continue;
         }
         if(name.startsWith("test")){
-          m_testCases.add(new TestCase(child.getAbsolutePath()));
+          m_testCases.add(new TestCase(child.getAbsolutePath(), new String[]{"a.out"}));
         }
         if(name.startsWith("template")){
           m_template = child.getAbsolutePath();

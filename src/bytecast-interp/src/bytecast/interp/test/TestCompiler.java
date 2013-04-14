@@ -24,30 +24,44 @@ import edu.syr.bytecast.util.WriteStringAsFile;
 import java.io.File;
 import java.util.List;
 
-public class TestCPU {
+public class TestCompiler {
 
   private ReadFileAsString m_fileReader;
   private WriteStringAsFile m_fileWriter;
   
-  public TestCPU(){
+  public TestCompiler(){
     m_fileReader = new ReadFileAsString();
     m_fileWriter = new WriteStringAsFile();
   }
   
-  public int test(String run_folder,String[] args) {
+  public String compile(String filename, String template, String aout_fname) {
     try {
-      //run test case
-      RunProcess runner2 = new RunProcess();
-      String exec_string = run_folder + File.separator + args[0];
-      for(int i = 1; i < args.length; i++){
-          exec_string += " " + args[i];
+      //build complete .s file
+      String test_str = m_fileReader.read(filename);
+      String template_str = m_fileReader.read(template);
+      template_str = template_str.replace("code", test_str);
+      File temp_folder = new File("temp");
+      if(temp_folder.exists() == false){
+        temp_folder.mkdirs();
       }
-      int ret = runner2.exec(exec_string, new File(run_folder));
+      String dest_filename = "temp" + File.separator + "cpu_test.s";
+      m_fileWriter.write(dest_filename, template_str);
       
-      return ret;
+      String aout_filename = "temp" + File.separator + aout_fname;
+      File aout_file = new File(aout_filename);
+      if(aout_file.exists()){
+        aout_file.delete();
+      }
+      
+      //compile .s file
+      RunProcess runner1 = new RunProcess();
+      runner1.exec("gcc cpu_test.s", new File("temp"));
+      
+      return new File("temp").getAbsolutePath();
+      
     } catch(Exception ex){
       ex.printStackTrace(System.out);
-      return -100;
+      return "";
     }
   }
   

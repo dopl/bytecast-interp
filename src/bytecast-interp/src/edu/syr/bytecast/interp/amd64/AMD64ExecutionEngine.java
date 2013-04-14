@@ -52,6 +52,7 @@ public class AMD64ExecutionEngine implements IBytecastInterp {
         m_instructions.put(InstructionType.JMP, new ISAInstructionJMP()); 
         m_instructions.put(InstructionType.JNE, new ISAInstructionJNE()); 
         m_instructions.put(InstructionType.LEA, new ISAInstructionLEA()); 
+        m_instructions.put(InstructionType.LEAVE, new ISAInstructionLEAVEQ()); 
         m_instructions.put(InstructionType.LEAVEQ, new ISAInstructionLEAVEQ()); 
         m_instructions.put(InstructionType.MOV, new ISAInstructionMOV()); 
         m_instructions.put(InstructionType.MOVSBL, new ISAInstructionMOVSBL()); 
@@ -59,6 +60,7 @@ public class AMD64ExecutionEngine implements IBytecastInterp {
         m_instructions.put(InstructionType.NOP, new ISAInstructionNOP()); 
         m_instructions.put(InstructionType.POP, new ISAInstructionPOP()); 
         m_instructions.put(InstructionType.PUSH, new ISAInstructionPUSH()); 
+        m_instructions.put(InstructionType.RET, new ISAInstructionRETQ()); 
         m_instructions.put(InstructionType.RETQ, new ISAInstructionRETQ()); 
         m_instructions.put(InstructionType.SAR, new ISAInstructionSAR()); 
         m_instructions.put(InstructionType.SHR, new ISAInstructionSHR()); 

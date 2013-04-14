@@ -170,7 +170,7 @@ public class RegisterBank {
         }
     
         long value = m_naturalRegs.get(overlay.ParentRegisterName).getValue(overlay.MSB, overlay.LSB); 
-       // System.out.println("Getting register " + name.name() + " with value " + value);
+   //     System.out.println("Getting register " + name.name() + " with value " + value);  
         
         
         return value;

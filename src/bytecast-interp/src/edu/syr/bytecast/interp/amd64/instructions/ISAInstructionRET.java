@@ -15,23 +15,22 @@
  * along with Bytecast.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package edu.syr.bytecast.interp.amd64.instructions;
 
-package bytecast.interp.test;
+import edu.syr.bytecast.amd64.api.constants.InstructionType;
+import edu.syr.bytecast.amd64.api.instruction.IInstruction;
+import edu.syr.bytecast.interp.amd64.AMD64Environment;
+import edu.syr.bytecast.interp.amd64.IISAInstruction;
 
-public class TestCase {
- 
-  private String m_filename;
-  private String[] m_args;
-  public TestCase(String filename, String[] args) {
-    m_filename = filename;
-    m_args = args;
-  }
-  
-  public String getFilename(){
-    return m_filename;
-  }
-  
-  public String[] getArgs(){
-      return m_args;
-  }
+public class ISAInstructionRET implements IISAInstruction {
+
+    @Override
+    public InstructionType getInstructionType() {
+        return InstructionType.RET;
+    }
+
+    @Override
+    public long execute(AMD64Environment env, IInstruction instruction) {
+        return 0;
+    }
 }
