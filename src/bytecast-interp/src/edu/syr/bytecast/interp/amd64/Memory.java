@@ -31,7 +31,7 @@ public class Memory {
     
     //Stores a value of num_bytes in a little endian format
     public void setValue(long address, long value, long num_bytes){
-        System.out.println("Setting address " + address + " to value " + value + " with length " + num_bytes);
+//        System.out.println("Setting address " + address + " to value " + value + " with length " + num_bytes);
         long mask = 0x00000000000000ff;
         for(int i = 0; i < num_bytes; i++)
         {
@@ -44,13 +44,13 @@ public class Memory {
     public long getValue(long address, long num_bytes){
         long ret=0;
         long mask = 0x00000000000000ffL;
-        System.out.print("Getting address " + address);
+ //       System.out.print("Getting address " + address);
         for(int i = 0; i < num_bytes; i++){
             Byte byte_val = m_memory.get(address+i);
             long shifted_val = (mask & byte_val) << (i*8);
             ret |= shifted_val;
         }        
-        System.out.println(" with value " + ret + " of length " + num_bytes);
+ //       System.out.println(" with value " + ret + " of length " + num_bytes);
         
         return ret;
     }        

@@ -18,14 +18,16 @@
 
 package bytecast.interp.test;
 
+import bytecast.interp.test.input.mockups.Test01InputMockup;
 import edu.syr.bytecast.amd64.api.instruction.IInstruction;
 import edu.syr.bytecast.amd64.util.StringToIInstruction;
+import edu.syr.bytecast.interp.amd64.AMD64ExecutionEngine;
 
 public class TestInterp {
 
   public int test(String filename) {
-    StringToIInstruction stoi = new StringToIInstruction();
-    return -1;
+    AMD64ExecutionEngine eng = new AMD64ExecutionEngine();
+    return (int)eng.runProgram(new Test01InputMockup().buildInstructionObjects(), new String[]{"none"});
   }
   
 }
