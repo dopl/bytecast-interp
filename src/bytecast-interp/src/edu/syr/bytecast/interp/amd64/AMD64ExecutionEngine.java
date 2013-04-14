@@ -20,11 +20,14 @@ package edu.syr.bytecast.interp.amd64;
 
 import bytecast.interp.test.input.mockups.Test01InputMockup;
 import edu.syr.bytecast.amd64.api.constants.InstructionType;
+import edu.syr.bytecast.amd64.api.constants.OperandType;
 import edu.syr.bytecast.amd64.api.constants.RegisterType;
 import edu.syr.bytecast.amd64.api.instruction.IInstruction;
+import edu.syr.bytecast.amd64.api.instruction.IOperand;
 import edu.syr.bytecast.amd64.api.output.IExecutableFile;
 import edu.syr.bytecast.amd64.api.output.ISection;
 import edu.syr.bytecast.amd64.api.output.MemoryInstructionPair;
+import edu.syr.bytecast.amd64.impl.instruction.AMD64Instruction;
 import edu.syr.bytecast.interfaces.fsys.ExeObjSegment;
 import edu.syr.bytecast.interfaces.interp.IBytecastInterp;
 import edu.syr.bytecast.interp.amd64.instructions.*;
@@ -109,9 +112,13 @@ public class AMD64ExecutionEngine implements IBytecastInterp {
                 
                 //Fetch the current instruction and instruction type
                 IInstruction curr_inst = instructions.get(curr_instr_idx).getInstruction();
+                curr_inst = reverseOpcodes(curr_inst);
+                
                 InstructionType curr_inst_type = curr_inst.getInstructiontype();
                 
                 //Execute the instruction
+                System.out.println("----------------------------------");
+                System.out.println("Running instruction " + curr_inst_type.name());
                 jump_addr = m_instructions.get(curr_inst_type).execute(m_env, curr_inst);
                 
                 //If the instruction caused a jump, then push where to return
@@ -154,6 +161,19 @@ public class AMD64ExecutionEngine implements IBytecastInterp {
         return -1;
     }
     
+    private IInstruction reverseOpcodes(IInstruction instr){
+        List<IOperand> ops = instr.getOperands();
+        if (ops.size() > 1) {
+            IOperand op1 = ops.get(0);
+            IOperand op2 = ops.get(1);
+
+            if (op2 != null && op2.getOperandType() != OperandType.SECTION_NAME) {
+                ops.set(0, op2);
+                ops.set(1, op1);
+            }
+        }
+        return new AMD64Instruction(instr.getInstructiontype(),ops);        
+    }
     public static void main(String args[])
     {
         Test01InputMockup mock = new Test01InputMockup();
