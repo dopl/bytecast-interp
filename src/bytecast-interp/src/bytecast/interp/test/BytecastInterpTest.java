@@ -38,7 +38,12 @@ public class BytecastInterpTest {
       int index = count + 1;
       File file = new File(filename);
       System.out.println("[Test "+index+"/"+m_testCases.size()+"]: "+file.getName());
-      String compiled_path = new TestCompiler().compile(filename, m_template,args[0]);
+      String compiled_path;
+      if(filename.endsWith(".c")){
+          compiled_path = new CTestCompiler().compile(filename, args[0]);
+      } else {
+          compiled_path = new ASMTestCompiler().compile(filename, m_template,args[0]);
+      }
       int cpu_ret = runCpu(compiled_path,  args);
       int interp_ret = runInterp(compiled_path, args);
       

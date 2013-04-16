@@ -71,7 +71,8 @@ public class AMD64ExecutionEngine implements IBytecastInterp {
     public long runProgram(IExecutableFile input, String[] args) {
         m_env = new AMD64Environment();
         
-        m_env.setValue(RegisterType.EDI, args.length);
+        //allocate arguments in memory
+        allocArgs(args);
         
         //Load all loadable content provided by fsys to the AMD64Environment 
         //memory
@@ -93,6 +94,35 @@ public class AMD64ExecutionEngine implements IBytecastInterp {
         return m_env.getValue(RegisterType.EAX);
     }
    
+    private void allocArgs(String[] args){
+        //Store argc
+        m_env.setValue(RegisterType.EDI, args.length);
+        
+        //Set start pointer to list of argument pointers
+        long curr_arg_ptr_addr = 0xff00000000000000l;
+        m_env.setValue(RegisterType.RSI, curr_arg_ptr_addr);
+        
+        //Set where the actual strings start to be stored in memory
+        long curr_arg_addr = 0xfff0000000000000l;
+        for(int i = 0; i < args.length; i++){
+            
+            //Set this argument pointer to the start of the string
+            m_env.setValue(curr_arg_ptr_addr, curr_arg_addr, 8);
+
+            //Copy the string into memory
+            for(int j = 0; j < args[i].length();j++){
+                m_env.setValue(curr_arg_addr, (long)args[i].charAt(j), 1);
+                curr_arg_addr++;
+            }
+            
+            //End the string with a null terminator
+            m_env.setValue(curr_arg_addr, (long)'\0', 1);
+            curr_arg_addr++;
+            
+            //Move to next argument pointer
+            curr_arg_ptr_addr+=8;
+        }
+    }
     private void executeCallStack(Stack<IndexPair> call_stack, List<ISection> sections) {
 
         //loop until all instructions have ben executed
