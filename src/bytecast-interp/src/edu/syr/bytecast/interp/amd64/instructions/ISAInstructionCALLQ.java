@@ -19,8 +19,12 @@
 package edu.syr.bytecast.interp.amd64.instructions;
 
 import edu.syr.bytecast.amd64.api.constants.InstructionType;
+import edu.syr.bytecast.amd64.api.constants.OperandType;
+import edu.syr.bytecast.amd64.api.constants.OperandTypeMemoryEffectiveAddress;
+import edu.syr.bytecast.amd64.api.constants.RegisterType;
 import edu.syr.bytecast.amd64.api.instruction.IInstruction;
 import edu.syr.bytecast.amd64.api.instruction.IOperand;
+import edu.syr.bytecast.amd64.impl.instruction.operand.OperandSectionName;
 import edu.syr.bytecast.interp.amd64.AMD64Environment;
 import edu.syr.bytecast.interp.amd64.IISAInstruction;
 import java.util.List;
@@ -40,16 +44,34 @@ public class ISAInstructionCALLQ implements IISAInstruction {
       if(operands.size()==2)
       {
            IOperand op1 = operands.get(0);
-           //IOperand op2 = operands.get(1);
+           IOperand op2 = operands.get(1);
            
-           int op_width1 = env.getOperandWidth(op1);
-           //int op_width2 = env.getOperandWidth(op2);
+           OperandTypeMemoryEffectiveAddress op_addr =(OperandTypeMemoryEffectiveAddress)op1.getOperandValue();
+           long val1= env.getMemoryAddress(op_addr);
            
-           long val1= env.getValue(op1, op_width1);
-           //long val2= env.getValue(op2, op_width2);
-
-           env.setValue(op1, val1, op_width1);
-           ret = val1;  
+           String section_name = "";
+           if(op2 != null && op2.getOperandType() == OperandType.SECTION_NAME){
+              section_name = (String)op2.getOperandValue();
+           }
+           
+           //printf special case
+           if(section_name.contains("printf")){
+               //RDI contains a pointer to the input string
+               long curr_str_addr = env.getValue(RegisterType.RDI);
+               long arg1_val = env.getValue(RegisterType.ESI);
+               
+               String string_to_print = "";
+               char curr_char = (char)env.getValue(curr_str_addr, 1);
+               while(curr_char != '\0'){
+                   string_to_print += curr_char;
+                   curr_str_addr=curr_str_addr+1;
+                   curr_char = (char)env.getValue(curr_str_addr, 1);
+               }
+               string_to_print = string_to_print.replace("%d", String.valueOf(arg1_val));
+               System.out.println(string_to_print);
+           } else {
+               return val1;
+           } 
       }
       return ret ;
   }

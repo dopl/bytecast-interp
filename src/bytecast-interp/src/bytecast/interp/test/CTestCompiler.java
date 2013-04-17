@@ -41,7 +41,7 @@ public class CTestCompiler {
       
       //compile .s file
       RunProcess runner1 = new RunProcess();
-      runner1.exec("gcc " + filename, new File("temp"));
+      runner1.exec("gcc -static " + filename, new File("temp"));
       
       return new File("temp").getAbsolutePath();
       

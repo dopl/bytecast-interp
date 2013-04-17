@@ -179,7 +179,7 @@ public class AMD64ExecutionEngine implements IBytecastInterp {
             List<Byte> raw_data = segment.getBytes();
             for(int i = 0; i < segment.getSize(); i++)
             {
-                m_env.setValue(current_address,(long)raw_data.get(i),1);
+                m_env.setValue(current_address+i,(long)raw_data.get(i),1);
             }
         }
     }

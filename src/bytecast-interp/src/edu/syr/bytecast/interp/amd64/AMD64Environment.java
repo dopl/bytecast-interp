@@ -41,7 +41,7 @@ public class AMD64Environment {
     }
     
     //Calculates a memory address from OperandTypeMemoryEffectiveAddress
-    private long getMemoryAddress(OperandTypeMemoryEffectiveAddress addr)
+    public long getMemoryAddress(OperandTypeMemoryEffectiveAddress addr)
     {
         RegisterType baseReg  = addr.getBase();
         RegisterType indexReg = addr.getIndex();
