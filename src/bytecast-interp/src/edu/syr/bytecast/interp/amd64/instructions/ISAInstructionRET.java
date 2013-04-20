@@ -31,6 +31,6 @@ public class ISAInstructionRET implements IISAInstruction {
 
     @Override
     public long execute(AMD64Environment env, IInstruction instruction) {
-        return 0;
+        return -1;
     }
 }

@@ -139,7 +139,7 @@ public class AMD64ExecutionEngine implements IBytecastInterp {
             long jump_addr=0;
             
             //Loop until a branch or the end of the section is reached.
-            while(jump_addr == 0 && curr_instr_idx < instructions.size())
+            while(jump_addr == 0 && jump_addr != -1 && curr_instr_idx < instructions.size())
             {
                 
                 //Fetch the current instruction and instruction type
@@ -149,14 +149,14 @@ public class AMD64ExecutionEngine implements IBytecastInterp {
                 InstructionType curr_inst_type = curr_inst.getInstructiontype();
                 
                 //Execute the instruction
-                //System.out.println("----------------------------------");
-                //System.out.println("Running instruction " + curr_inst_type.name());
+                System.out.println("----------------------------------");
+                System.out.println("Running instruction " + curr_inst_type.name());
                 jump_addr = m_instructions.get(curr_inst_type).execute(m_env, curr_inst);
                 
                 //If the instruction caused a jump, then push where to return
                 //after the jump has completed and then push the instruction
                 //being jumped to.
-                if(jump_addr != 0) {
+                if(jump_addr > 0) {
                     call_stack.push(new IndexPair(curr_section_idx, curr_instr_idx+1));
                     call_stack.push(findInstruction(sections, jump_addr));
                 }

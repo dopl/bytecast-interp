@@ -153,7 +153,7 @@ public class RegisterBank {
     //Sets a register in the register bank
     public void setValue(RegisterType name, long value){
         
-       // System.out.println("Setting register " + name.name() + " to value " + value);
+        System.out.println("Setting register " + name.name() + " to value " + value);
         if(m_regOverlays.containsKey(name)){
             RegisterOverlay overlay = m_regOverlays.get(name); 
             m_naturalRegs.get(overlay.ParentRegisterName).setValue(value, overlay.MSB, overlay.LSB);
@@ -170,7 +170,7 @@ public class RegisterBank {
         }
     
         long value = m_naturalRegs.get(overlay.ParentRegisterName).getValue(overlay.MSB, overlay.LSB); 
-   //     System.out.println("Getting register " + name.name() + " with value " + value);  
+        System.out.println("Getting register " + name.name() + " with value " + value);  
         
         
         return value;
