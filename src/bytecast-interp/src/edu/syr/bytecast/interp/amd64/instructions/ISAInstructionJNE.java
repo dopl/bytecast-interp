@@ -19,6 +19,7 @@
 package edu.syr.bytecast.interp.amd64.instructions;
 
 import edu.syr.bytecast.amd64.api.constants.InstructionType;
+import edu.syr.bytecast.amd64.api.constants.OperandTypeMemoryEffectiveAddress;
 import edu.syr.bytecast.amd64.api.constants.RegisterType;
 import edu.syr.bytecast.amd64.api.instruction.IInstruction;
 import edu.syr.bytecast.amd64.api.instruction.IOperand;
@@ -43,8 +44,7 @@ public class ISAInstructionJNE implements IISAInstruction {
     }
     
     IOperand op = operands.get(0);
-    int width = env.getOperandWidth(op);
-    long addr = env.getValue(op, width);
+    long addr = env.getMemoryAddress((OperandTypeMemoryEffectiveAddress)op.getOperandValue());
     
     long zf = env.getValue(RegisterType.ZF);
     if(zf == 1) {

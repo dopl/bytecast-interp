@@ -86,7 +86,7 @@ public class BytecastInterpTest {
         if(name.startsWith(".")){
           continue;
         }
-        if(!(name.endsWith("test03.c"))){// || name.endsWith(".s"))){
+        if(!(name.endsWith(".c") || name.endsWith(".s"))){
           continue;
         }
         if(name.startsWith("test")){
