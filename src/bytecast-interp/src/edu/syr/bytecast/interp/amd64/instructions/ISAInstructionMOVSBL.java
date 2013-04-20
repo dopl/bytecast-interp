@@ -45,7 +45,18 @@ public class ISAInstructionMOVSBL implements IISAInstruction {
         // Move the value from the second operand to the first one.
         IOperand second = operands.get(1);
         IOperand first = operands.get(0);
-        long value = env.getValue(second, env.getOperandWidth(second));
+        
+        //get one byte from the second operand
+        long value = env.getValue(second, env.getOperandWidth(second)) & 0x0ff;
+        
+        //get the value of the 8th_bit
+        
+        int sign_bit = (int)value >> 7;
+        
+        if(sign_bit == 1){
+            value = value | 0xffffffffffffff00l;
+        }
+        
         env.setValue(first, value, env.getOperandWidth(first));
         return 0;
     }

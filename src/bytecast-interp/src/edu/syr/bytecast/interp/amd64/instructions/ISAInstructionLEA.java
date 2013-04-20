@@ -18,6 +18,7 @@
 package edu.syr.bytecast.interp.amd64.instructions;
 
 import edu.syr.bytecast.amd64.api.constants.InstructionType;
+import edu.syr.bytecast.amd64.api.constants.OperandTypeMemoryEffectiveAddress;
 import edu.syr.bytecast.amd64.api.instruction.IInstruction;
 import edu.syr.bytecast.amd64.api.instruction.IOperand;
 import edu.syr.bytecast.interp.amd64.AMD64Environment;
@@ -39,11 +40,10 @@ public class ISAInstructionLEA implements IISAInstruction {
       IOperand op2 = operands.get(1);
 
       int op_width1 = env.getOperandWidth(op1);
-      int op_width2 = env.getOperandWidth(op2);
 
-      long val1 = env.getValue(op1, op_width1);
+      long addr = env.getMemoryAddress((OperandTypeMemoryEffectiveAddress)op2.getOperandValue());
       
-      env.setValue(op2, val1, op_width2);
+      env.setValue(op1, addr, op_width1);
     }
     return 0;
   }

@@ -45,7 +45,10 @@ public class ISAInstructionMOVZBL implements IISAInstruction {
         // Move the value from the second operand to the first one.
         IOperand second = operands.get(1);
         IOperand first = operands.get(0);
-        long value = env.getValue(second, env.getOperandWidth(second));
+        
+        //get one byte from the second operand
+        long value = env.getValue(second, env.getOperandWidth(second)) & 0x0ff;
+        
         env.setValue(first, value, env.getOperandWidth(first));
         return 0;
     }
