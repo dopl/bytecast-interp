@@ -47,7 +47,7 @@ public class ISAInstructionMOVSBL implements IISAInstruction {
         IOperand first = operands.get(0);
         
         //get one byte from the second operand
-        long value = env.getValue(second, env.getOperandWidth(second)) & 0x0ff;
+        long value = env.getValue(second, 1) & 0x0ff;
         
         //get the value of the 8th_bit
         

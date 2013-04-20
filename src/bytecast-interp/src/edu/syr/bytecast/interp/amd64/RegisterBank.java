@@ -26,9 +26,12 @@ public class RegisterBank {
     
     private Map<RegisterType, Register> m_naturalRegs;
     private Map<RegisterType, RegisterOverlay> m_regOverlays;
+    private boolean m_debug_enabled;
     
     public RegisterBank()
     {    
+        m_debug_enabled = false;
+        
         m_regOverlays = new TreeMap<RegisterType, RegisterOverlay>();
         m_regOverlays.put(RegisterType.RAX,    new RegisterOverlay(RegisterType.RAX,     63, 0));
         m_regOverlays.put(RegisterType.EAX,    new RegisterOverlay(RegisterType.RAX,     31, 0));
@@ -150,10 +153,14 @@ public class RegisterBank {
         m_naturalRegs.put(RegisterType.EFLAGS,  new Register());
     }
 
+    public void setDebugging(boolean debug_value){
+        m_debug_enabled = debug_value;
+    }
     //Sets a register in the register bank
     public void setValue(RegisterType name, long value){
-        
-       // System.out.println("Setting register " + name.name() + " to value " + value);
+        if(m_debug_enabled){
+            System.out.println("Setting register " + name.name() + " to value " + value);
+        }
         if(m_regOverlays.containsKey(name)){
             RegisterOverlay overlay = m_regOverlays.get(name); 
             m_naturalRegs.get(overlay.ParentRegisterName).setValue(value, overlay.MSB, overlay.LSB);
@@ -170,7 +177,9 @@ public class RegisterBank {
         }
     
         long value = m_naturalRegs.get(overlay.ParentRegisterName).getValue(overlay.MSB, overlay.LSB); 
-   //     System.out.println("Getting register " + name.name() + " with value " + value);  
+        if(m_debug_enabled){
+            System.out.println("Getting register " + name.name() + " with value " + value);  
+        }
         
         
         return value;

@@ -1,6 +1,7 @@
 package edu.syr.bytecast.interp.amd64.instructions;
 
 import edu.syr.bytecast.amd64.api.constants.InstructionType;
+import edu.syr.bytecast.amd64.api.constants.OperandType;
 import edu.syr.bytecast.amd64.api.constants.RegisterType;
 import edu.syr.bytecast.amd64.api.instruction.IInstruction;
 import edu.syr.bytecast.amd64.api.instruction.IOperand;
@@ -24,10 +25,22 @@ public class ISAInstructionCMP implements IISAInstruction {
             IOperand op2 = operands.get(1);
 
             int op_width1 = env.getOperandWidth(op1);
-            int op_width2 = env.getOperandWidth(op1);
-
-            long val1 = env.getValue(op1, op_width1);
-            long val2 = env.getValue(op2, op_width2);
+            int op_width2 = env.getOperandWidth(op2);
+            long val1;
+            long val2;
+            if(op1.getOperandType() == OperandType.MEMORY_EFFECITVE_ADDRESS){
+                val1 = env.getValue(op1, op_width2);
+            } else
+            {
+                val1 = env.getValue(op1, op_width1);
+            }
+            
+            if(op2.getOperandType() == OperandType.MEMORY_EFFECITVE_ADDRESS){
+                val2 = env.getValue(op2, op_width1);
+            } else
+            {
+                val2 = env.getValue(op2, op_width2);
+            }
 
             long diff = val1 - val2;
 

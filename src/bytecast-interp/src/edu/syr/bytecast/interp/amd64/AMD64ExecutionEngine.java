@@ -70,13 +70,16 @@ public class AMD64ExecutionEngine implements IBytecastInterp {
     @Override
     public long runProgram(IExecutableFile input, String[] args) {
         m_env = new AMD64Environment();
-        
-        //allocate arguments in memory
-        allocArgs(args);
+
         
         //Load all loadable content provided by fsys to the AMD64Environment 
         //memory
         loadAllSegmentsToMemory(input.getSectionsWithRawData());
+        
+        m_env.setDebugging(true);
+          
+        //allocate arguments in memory
+        allocArgs(args);
         
         List<ISection> sections = input.getSectionsWithInstructions();
         int entry_point_index = getEntryPointIndex(sections);
@@ -125,6 +128,7 @@ public class AMD64ExecutionEngine implements IBytecastInterp {
     }
     private void executeCallStack(Stack<IndexPair> call_stack, List<ISection> sections) {
 
+
         //loop until all instructions have ben executed
         while(!call_stack.empty()){
             IndexPair curr_pair = call_stack.pop();
@@ -149,16 +153,19 @@ public class AMD64ExecutionEngine implements IBytecastInterp {
                 InstructionType curr_inst_type = curr_inst.getInstructiontype();
                 
                 //Execute the instruction
-                //System.out.println("----------------------------------");
-                //System.out.println("Running instruction " + curr_inst_type.name());
+                System.out.println("----------------------------------");
+                System.out.println("Running instruction " + curr_inst_type.name());
                 jump_addr = m_instructions.get(curr_inst_type).execute(m_env, curr_inst);
                 
                 //If the instruction caused a jump, then push where to return
                 //after the jump has completed and then push the instruction
                 //being jumped to.
                 if(jump_addr > 0) {
+                    System.err.println("Jumping to " + Long.toHexString(jump_addr));
                     call_stack.push(new IndexPair(curr_section_idx, curr_instr_idx+1));
-                    call_stack.push(findInstruction(sections, jump_addr));
+                    if(curr_inst_type == InstructionType.CALL || curr_inst_type == InstructionType.CALLQ){
+                        call_stack.push(findInstruction(sections, jump_addr));
+                    }
                 }
                 else{
                     curr_instr_idx++;

@@ -33,6 +33,10 @@ public class AMD64Environment {
         m_regbank   = new RegisterBank();
     }
     
+    public void setDebugging(boolean debug_value){
+        m_regbank.setDebugging(debug_value);
+        m_memory.setDebugging(debug_value);
+    }
     //Get the contents of a register
     public long getValue(RegisterType register) {
         long ret;
@@ -146,7 +150,12 @@ public class AMD64Environment {
             case MEMORY_EFFECITVE_ADDRESS:
                 OperandTypeMemoryEffectiveAddress op_conv = (OperandTypeMemoryEffectiveAddress)op.getOperandValue();
                 width = m_regbank.getWidth(op_conv.getBase());
-                       
+                break;
+                
+            case CONSTANT:
+                width = 4;
+                break;
+                
             default: 
                 width = 8;
                 break;

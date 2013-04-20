@@ -18,6 +18,7 @@
 package edu.syr.bytecast.interp.amd64.instructions;
 
 import edu.syr.bytecast.amd64.api.constants.InstructionType;
+import edu.syr.bytecast.amd64.api.constants.OperandType;
 import edu.syr.bytecast.amd64.api.instruction.IInstruction;
 import edu.syr.bytecast.amd64.api.instruction.IOperand;
 import edu.syr.bytecast.interp.amd64.AMD64Environment;
@@ -46,7 +47,13 @@ public class ISAInstructionMOV implements IISAInstruction {
         IOperand second=operands.get(1);
         IOperand first=operands.get(0);
         long value=env.getValue(second, env.getOperandWidth(second));
-        env.setValue(first, value, env.getOperandWidth(first));
+        int op_width1 = env.getOperandWidth(first);
+        int op_width2 = env.getOperandWidth(second);
+        int write_width = op_width1;
+        if(first.getOperandType() == OperandType.MEMORY_EFFECITVE_ADDRESS){
+            write_width = op_width2;
+        }
+        env.setValue(first, value, write_width);
         return 0;
     }
 }

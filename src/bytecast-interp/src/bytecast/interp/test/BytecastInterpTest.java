@@ -89,6 +89,9 @@ public class BytecastInterpTest {
         if(!(name.endsWith(".c") || name.endsWith(".s"))){
           continue;
         }
+        if(name.startsWith("test09")){
+          m_testCases.add(new TestCase(child.getAbsolutePath(), new String[]{"a.out", "a","b"}));
+        }
         if(name.startsWith("test")){
           m_testCases.add(new TestCase(child.getAbsolutePath(), new String[]{"a.out"}));
         }

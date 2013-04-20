@@ -47,7 +47,7 @@ public class ISAInstructionJNE implements IISAInstruction {
     long addr = env.getMemoryAddress((OperandTypeMemoryEffectiveAddress)op.getOperandValue());
     
     long zf = env.getValue(RegisterType.ZF);
-    if(zf == 1) {
+    if(zf == 0) {
       return addr;
     }
     return 0;
