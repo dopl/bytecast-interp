@@ -19,6 +19,7 @@ package edu.syr.bytecast.interp.amd64.instructions;
 
 import edu.syr.bytecast.amd64.api.constants.InstructionType;
 import edu.syr.bytecast.amd64.api.constants.OperandType;
+import edu.syr.bytecast.amd64.api.constants.RegisterType;
 import edu.syr.bytecast.amd64.api.instruction.IInstruction;
 import edu.syr.bytecast.amd64.api.instruction.IOperand;
 import edu.syr.bytecast.interp.amd64.AMD64Environment;
@@ -40,16 +41,48 @@ public class ISAInstructionSAR implements IISAInstruction {
     public long execute(AMD64Environment env, IInstruction instruction) {
         List<IOperand> operands = instruction.getOperands();
         if (operands.size() > 0) {
-            IOperand op1 = operands.get(0);
 
-            int op_width1 = env.getOperandWidth(op1);
 
-            long val1 = env.getValue(op1, op_width1);
-            
-            val1 = val1 >> 1;
-            
-            env.setValue(op1, val1, op_width1);
+            long shift_amount = 1;
+            if (operands.size() == 2) {
+                IOperand op2 = operands.get(1);
+                int op_width2 = env.getOperandWidth(op2);
+                shift_amount = env.getValue(op2, op_width2);
+            }
 
+            if (shift_amount != 0) {
+                IOperand op1 = operands.get(0);
+
+                int op_width1 = env.getOperandWidth(op1);
+
+                long val1 = env.getValue(op1, op_width1);
+                
+                //Set carry flag to last bit out
+                env.setValue(RegisterType.CF, val1 & 0x1);
+                
+                val1 = val1 >> 1;
+                
+                if(val1 == 0){
+                    env.setValue(RegisterType.ZF, 1);
+                } else {
+                    env.setValue(RegisterType.ZF, 0);
+                }
+                
+                if(val1 < 0) {
+                    env.setValue(RegisterType.SF, 1);
+                } else {
+                    env.setValue(RegisterType.SF, 0);
+                }
+                
+                if(ISAUtil.isEvenParity(val1)) {
+                    env.setValue(RegisterType.PF, 1);                    
+                } else {
+                    env.setValue(RegisterType.PF, 0);               
+                }
+                
+                env.setValue(op1, val1, op_width1);
+
+            }
         }
         return 0;
     }
