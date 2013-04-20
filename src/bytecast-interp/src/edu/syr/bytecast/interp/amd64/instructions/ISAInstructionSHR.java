@@ -37,15 +37,17 @@ public class ISAInstructionSHR implements IISAInstruction {
 
   @Override
   public long execute(AMD64Environment env, IInstruction instruction) {
-     List<IOperand> operands = instruction.getOperands();
-        if (operands.size() == 1) {
+        List<IOperand> operands = instruction.getOperands();
+        if (operands.size() > 0) {
             IOperand op1 = operands.get(0);
 
             int op_width1 = env.getOperandWidth(op1);
 
             long val1 = env.getValue(op1, op_width1);
-
-            env.setValue(op1, val1>>1, op_width1);
+            
+            val1 = val1 >>> 1;
+            
+            env.setValue(op1, val1, op_width1);
 
         }
         return 0;

@@ -39,23 +39,18 @@ public class ISAInstructionSAR implements IISAInstruction {
     @Override
     public long execute(AMD64Environment env, IInstruction instruction) {
         List<IOperand> operands = instruction.getOperands();
-        if (operands == null) {
-            return 0;
-        }
+        if (operands.size() > 0) {
+            IOperand op1 = operands.get(0);
 
-        IOperand location;
-        long count = 1;
-        if (operands.size() == 1) {
-            location = operands.get(0);
-        } else if (operands.size() == 2) {
-            IOperand first = operands.get(0);
-            count = env.getValue(first, env.getOperandWidth(first));
-            location = operands.get(1);
-        } else {
-            return 0;
-        }
+            int op_width1 = env.getOperandWidth(op1);
 
-        // Shift Arithmetic Right
-        throw new UnsupportedOperationException();
+            long val1 = env.getValue(op1, op_width1);
+            
+            val1 = val1 >> 1;
+            
+            env.setValue(op1, val1, op_width1);
+
+        }
+        return 0;
     }
 }
