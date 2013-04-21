@@ -46,13 +46,13 @@ public class ISAInstructionMOV implements IISAInstruction {
         // Move the value from the second operand to the first one.
         IOperand second=operands.get(1);
         IOperand first=operands.get(0);
-        long value=env.getValue(second, env.getOperandWidth(second));
         int op_width1 = env.getOperandWidth(first);
         int op_width2 = env.getOperandWidth(second);
         int write_width = op_width1;
         if(first.getOperandType() == OperandType.MEMORY_EFFECITVE_ADDRESS){
             write_width = op_width2;
         }
+        long value=env.getValue(second, write_width);
         env.setValue(first, value, write_width);
         return 0;
     }

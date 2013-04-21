@@ -76,7 +76,7 @@ public class AMD64ExecutionEngine implements IBytecastInterp {
         //memory
         loadAllSegmentsToMemory(input.getSectionsWithRawData());
         
-        m_env.setDebugging(true);
+//        m_env.setDebugging(true);
           
         //allocate arguments in memory
         allocArgs(args);
@@ -102,11 +102,11 @@ public class AMD64ExecutionEngine implements IBytecastInterp {
         m_env.setValue(RegisterType.EDI, args.length);
         
         //Set start pointer to list of argument pointers
-        long curr_arg_ptr_addr = 0xff00000000000000l;
+        long curr_arg_ptr_addr = 0x00000000ff000000l;
         m_env.setValue(RegisterType.RSI, curr_arg_ptr_addr);
         
         //Set where the actual strings start to be stored in memory
-        long curr_arg_addr = 0xfff0000000000000l;
+        long curr_arg_addr = 0x00000000fff00000l;
         for(int i = 0; i < args.length; i++){
             
             //Set this argument pointer to the start of the string
@@ -145,7 +145,7 @@ public class AMD64ExecutionEngine implements IBytecastInterp {
             //Loop until a branch or the end of the section is reached.
             while(jump_addr == 0 && jump_addr != -1 && curr_instr_idx < instructions.size())
             {
-                
+                long mem_loc = instructions.get(curr_instr_idx).getmInstructionAddress();
                 //Fetch the current instruction and instruction type
                 IInstruction curr_inst = instructions.get(curr_instr_idx).getInstruction();
                 curr_inst = reverseOpcodes(curr_inst);
@@ -153,19 +153,21 @@ public class AMD64ExecutionEngine implements IBytecastInterp {
                 InstructionType curr_inst_type = curr_inst.getInstructiontype();
                 
                 //Execute the instruction
-                System.out.println("----------------------------------");
-                System.out.println("Running instruction " + curr_inst_type.name());
+  //              System.out.println("----------------------------------");
+ //               System.out.println("Running instruction " + curr_inst_type.name() + " at " + Long.toHexString(mem_loc));
                 jump_addr = m_instructions.get(curr_inst_type).execute(m_env, curr_inst);
                 
                 //If the instruction caused a jump, then push where to return
                 //after the jump has completed and then push the instruction
                 //being jumped to.
                 if(jump_addr > 0) {
-                    System.err.println("Jumping to " + Long.toHexString(jump_addr));
-                    call_stack.push(new IndexPair(curr_section_idx, curr_instr_idx+1));
+  //                  System.err.println("Jumping to " + Long.toHexString(jump_addr));
                     if(curr_inst_type == InstructionType.CALL || curr_inst_type == InstructionType.CALLQ){
-                        call_stack.push(findInstruction(sections, jump_addr));
+                        call_stack.push(new IndexPair(curr_section_idx, curr_instr_idx+1));
                     }
+                    
+                    call_stack.push(findInstruction(sections, jump_addr));
+                   
                 }
                 else{
                     curr_instr_idx++;

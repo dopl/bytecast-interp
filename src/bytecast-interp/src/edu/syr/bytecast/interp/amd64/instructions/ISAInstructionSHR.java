@@ -58,7 +58,7 @@ public class ISAInstructionSHR implements IISAInstruction {
                 //Set carry flag to last bit out
                 env.setValue(RegisterType.CF, val1 & 0x1);
                 
-                val1 = val1 >>> 1;
+                val1 = val1 >>> shift_amount;
                 
                 if(val1 == 0){
                     env.setValue(RegisterType.ZF, 1);

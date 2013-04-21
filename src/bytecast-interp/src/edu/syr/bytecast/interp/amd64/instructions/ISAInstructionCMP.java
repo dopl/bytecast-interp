@@ -42,7 +42,7 @@ public class ISAInstructionCMP implements IISAInstruction {
                 val2 = env.getValue(op2, op_width2);
             }
 
-            long diff = val1 - val2;
+            long diff = val1-val2;
 
             //CMP doesnt save the actual difference anywhere... it just
             //updates the EFLAGS register
